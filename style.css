@@ -9,7 +9,7 @@ body {
   background-color: white;
   padding-top: 0px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 10vh; 
+  margin-top: 9vh; 
 }
 
 .media img {
@@ -34,7 +34,7 @@ body {
 
 .search-results{
   padding-top: 15px;
-  height: 670px;
+  height: 685px;
   overflow: scroll;
   padding-left: 50px !important;
 }
@@ -44,7 +44,7 @@ body {
   padding-left: 15px;
   border-right: 1px lightgrey solid;
   overflow: scroll;
-  height: 670px;
+  height: 685px;
 }
 
 .records {

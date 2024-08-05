@@ -16,6 +16,8 @@ const helper = algoliasearchHelper(client, INDEX, {
   maxValuesPerFacet: 10
 });
 
+let currentPage = 0;
+
 // HTML Elements
 const searchInput = document.getElementById('search-input');
 const resultsContainer = document.getElementById('results-container');
@@ -25,23 +27,34 @@ const starContainer = document.getElementById('star-rating-container');
 const resultsHits = document.getElementById('results-hits');
 const responseTime = document.getElementById('response-time');
 
+
+
+//Render Data to WebPage
+helper.setQuery('').setPage(currentPage).search();
+resultRender(helper);
+
+
+
 //construct query
 document.addEventListener('keyup', function (e) {
   e.preventDefault();
+  resultsContainer.innerHTML = '';
   helper.setQuery(searchInput.value).search();
-  resultRender();
 });
 
-//Render Data to WebPage
-helper.setQuery('').search();
-resultRender();
 
+
+document.getElementById('load-more').addEventListener('click', (e) => {
+  e.preventDefault();
+  currentPage += 1;
+  helper.setPage(currentPage).search();
+});
 
 
 
 //function co
-function resultRender() {
-  helper.on('result', function (event) {
+function resultRender(algoliaHelper) {
+  algoliaHelper.on('result', function (event) {
     if (event.results.hits.length === 0) {
       resultsHits.innerHTML = '0';
       responseTime.innerHTML = (event.results.processingTimeMS) / 1000;
@@ -59,7 +72,7 @@ function resultRender() {
     renderRatingStars(starContainer);
 
   });
-  helper.on('error', (error) => {
+  algoliaHelper.on('error', (error) => {
     console.error('Algolia Search Error:', error);
   });
 }
