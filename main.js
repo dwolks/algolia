@@ -26,56 +26,77 @@ const foodContainer = document.getElementById('food-type-container');
 const starContainer = document.getElementById('star-rating-container');
 const resultsHits = document.getElementById('results-hits');
 const responseTime = document.getElementById('response-time');
+const loadMore = document.getElementById('load-more');
 
+//UI function
+function toggleActiveClass(element) {
+  element.classList.toggle('active');
+}
 
+foodContainer.addEventListener('mouseover', (e) => {
+  e.preventDefault();
+  e.target.style.cursor = 'pointer';
+  toggleActiveClass(e.target);
+});
+
+foodContainer.addEventListener('mouseout', (e) => {
+  e.preventDefault();
+  toggleActiveClass(e.target);
+});
 
 //Render Data to WebPage
 helper.setQuery('').setPage(currentPage).search();
-resultRender(helper);
+//resultRender(helper);
 
+//Facet Listeners
+foodContainer.addEventListener('click', (e) => {
+  e.preventDefault();
+  toggleActiveClass(e.target);
+  //console.log(e.target.getAttribute('value'));
+  resultsContainer.innerHTML = '';
+  starContainer.innerHTML = '';
+  helper.toggleFacetRefinement('food_type', e.target.getAttribute('value')).search();
+});
 
 
 //construct query
-document.addEventListener('keyup', function (e) {
+searchInput.addEventListener('keyup', function (e) {
   e.preventDefault();
   resultsContainer.innerHTML = '';
   helper.setQuery(searchInput.value).search();
 });
 
 
-
-document.getElementById('load-more').addEventListener('click', (e) => {
+//Load more results by increasing page number
+loadMore.addEventListener('click', (e) => {
   e.preventDefault();
   currentPage += 1;
   helper.setPage(currentPage).search();
 });
 
 
-
-//function co
-function resultRender(algoliaHelper) {
-  algoliaHelper.on('result', function (event) {
-    if (event.results.hits.length === 0) {
-      resultsHits.innerHTML = '0';
-      responseTime.innerHTML = (event.results.processingTimeMS) / 1000;
-      resultsContainer.innerHTML = 'No Results Found';
-      paymentContainer.innerHTML = 'No Payment Options Found';
-      foodContainer.innerHTML = 'No Food Options Found';
-      starContainer.innerHTML = 'No Ratings Found';
-      return;
-    }
-    resultsHits.innerHTML = event.results.nbHits;
+helper.on('result', function (event) {
+  if (event.results.hits.length === 0) {
+    resultsHits.innerHTML = '0';
     responseTime.innerHTML = (event.results.processingTimeMS) / 1000;
-    renderHits(event, resultsContainer);
-    renderPaymentFacets(event, paymentContainer);
-    renderFoodFacets(event, foodContainer);
-    renderRatingStars(starContainer);
+    resultsContainer.innerHTML = 'No Results Found';
+    paymentContainer.innerHTML = 'No Payment Options Found';
+    foodContainer.innerHTML = 'No Food Options Found';
+    starContainer.innerHTML = 'No Ratings Found';
+    return;
+  }
+  resultsHits.innerHTML = event.results.nbHits;
+  responseTime.innerHTML = (event.results.processingTimeMS) / 1000;
+  renderHits(event, resultsContainer);
+  renderPaymentFacets(event, paymentContainer);
+  renderFoodFacets(event, foodContainer);
+  renderRatingStars(starContainer);
 
-  });
-  algoliaHelper.on('error', (error) => {
-    console.error('Algolia Search Error:', error);
-  });
-}
+});
+
+helper.on('error', (error) => {
+  console.error('Algolia Search Error:', error);
+});
 
 
 

@@ -9,6 +9,11 @@ build/
 # Ignore IDE files
 .idea/
 .vscode/
+.firebaserc
+firebase.json
+.firebase/ 
+
+
 
 # Ignore dependencies
 node_modules/
