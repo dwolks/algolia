@@ -9,7 +9,7 @@ body {
   background-color: white;
   padding-top: 0px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 9vh; 
+  margin-top: 8vh; 
 }
 
 .media img {
@@ -66,8 +66,8 @@ body {
 }
 
 .list-group-item {
-  margin: 0px 10px;
-  padding: 2px 0 !important;
+  /* margin: 0px 10px; */
+  padding: 5px !important; 
 }
 
 .food-type-count{
